@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Polluants Émergents dans l'Eau — Détection & Solutions</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <!-- AOS (animations on scroll) -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+    <style>
+        :root{
+            --primary: #1a5276;
+            --primary-2: #2874a6;
+            --accent: #3498db;
+            --muted: #566573;
+            --bg: #f0f8ff;
+            --glass: rgba(255,255,255,0.6);
+            --card-border: rgba(255,255,255,0.5);
+            --dark: #1b4f72;
+            --water-blue: #e1f5fe;
+            --glass-strong: rgba(255,255,255,0.85);
+        }
+
+        /* Global */
+        * { box-sizing: border-box; }
+        html,body { height:100%; margin: 0; padding: 0; }
+        body{
+            font-family:'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color: #1a5276;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+            overflow-x: hidden;
+        }
+
+        /* Video Background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+        }
+
+        .content-overlay {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+            min-height: 100vh;
+            
+        }
+
+        /* Navbar */
+        .navbar {
+            backdrop-filter: blur(6px);
+            background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.5));
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            transition: all .3s ease;
+        }
+        .navbar-brand { font-weight:700; color:var(--primary); letter-spacing:0.2px; }
+        .nav-link { color: #1a5276 !important; font-weight:500; }
+        .nav-link:hover { color: var(--primary-2) !important; }
+
+        /* Hero */
+        .hero {
+            position:relative;
+            padding: 4.5rem 0 3.5rem 0;
+            overflow:hidden;
+        }
+        .hero-inner{
+            background: linear-gradient(135deg, rgba(26,82,118,0.95), rgba(40,116,166,0.9));
+            color: #fff;
+            padding: 2.2rem;
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(3,37,76,0.18);
+            position:relative;
+            overflow:hidden;
+        }
+        .hero h1{
+            font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+            margin-bottom: .4rem;
+            font-weight:700;
+            letter-spacing:0.2px;
+        }
+        .hero p.lead { opacity:0.95; margin-bottom:1rem; }
+
+        /* Full width countdown */
+        .countdown-full-width {
+            background: transparent;
+            border-radius: 0;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            align-items: center;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(10,30,45,0.2);
+            border: none;
+            color: white;
+        }
+        .countdown-item { text-align:center; min-width: 100px; }
+        .countdown-value {
+            font-family: 'Courier New', monospace;
+            font-weight:700;
+            font-size: 2.5rem;
+            color: white;
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 12px;
+            display: inline-block;
+            min-width: 90px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .countdown-label { 
+            font-size: 0.9rem; 
+            color: rgba(255,255,255,0.9); 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* decorative waves */
+        .hero-wave { position:absolute; right:-10%; bottom:-2%; width:60%; opacity:.18; filter: blur(2px); transform: rotate(4deg); }
+
+        /* Cards / glass */
+        .card-glass {
+            background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.7));
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(10,30,45,0.1);
+            padding: 1.1rem;
+            transition: transform .25s ease, box-shadow .25s ease;
+            overflow:hidden;
+        }
+        .card-glass:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(10,30,45,0.15); }
+
+        .card-header-glass {
+            padding:.55rem .9rem;
+            background: linear-gradient(90deg, rgba(26,82,118,0.9), rgba(40,116,166,0.85));
+            color:white;
+            border-radius: 10px;
+            font-weight:600;
+        }
+
+        .icon-circle {
+            width:64px; height:64px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            background: rgba(26,82,118,0.15); color: var(--primary);
+            margin-right: .9rem; flex-shrink:0;
+            font-size:1.35rem;
+        }
+
+        /* logos */
+       .logo-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover; /* Pour que l’image remplisse bien le cercle */
+  border-radius: 50%; /* Rend l’image totalement ronde */
+  background: #fff; /* Optionnel : fond blanc ou transparent */
+  padding: 8px;
+  box-shadow: 0 8px 22px rgba(6, 28, 45, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3); /* Optionnel pour un effet élégant */
+}
+
+
+        /* poster */
+        .poster-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 14px 40px rgba(6,28,45,0.1);
+        }
+
+        /* footer */
+        footer{
+            background: linear-gradient(90deg, #0a2c4e, #1a5276);
+            color:#cfeffb; padding:2rem 0; margin-top:3rem;
+        }
+        footer a { color:#8ee3ff; text-decoration:none; }
+        footer a:hover { text-decoration:underline; }
+
+        /* small helpers */
+        .muted { color:var(--muted); }
+        .rounded-xl{ border-radius: 14px; }
+
+        /* Map iframe */
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* responsive tweaks */
+        @media (max-width: 992px){
+            .hero { padding-top:3.5rem; }
+            .hero-inner { padding:1.4rem; border-radius:12px; }
+            .icon-circle { width:52px; height:52px; }
+            .countdown-full-width {
+                gap: 1rem;
+                padding: 1.5rem 0.5rem;
+            }
+            .countdown-value {
+                font-size: 1.8rem;
+                min-width: 70px;
+                padding: 0.7rem;
+            }
+            .countdown-item { min-width: 80px; }
+        }
+
+        @media (max-width: 768px) {
+            .countdown-full-width {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .countdown-item { min-width: 70px; }
+            .countdown-value {
+                font-size: 1.5rem;
+                min-width: 60px;
+                padding: 0.5rem;
+            }
+        }
+
+        /* subtle wave animation */
+        @keyframes floatX {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-18%); }
+        }
+        .hero-wave svg { width: 100%; animation: floatX 18s linear infinite; }
+
+        /* AOS helper */
+        [data-aos] { opacity: 0; transform: translateY(10px); transition: all .6s ease; }
+        [data-aos].aos-animate { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="nesrine-workshop.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-clear-water-flowing-down-a-waterfall-44355-large.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la lecture de vidéos.
+        </video>
+    </div>
+
+    <div class="content-overlay">
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">WORKSHOP • CERTE-LaDVEN</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-controls="navCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"><i class="bi bi-list"></i></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navCollapse">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item"><a class="nav-link" href="#about">À propos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#programme">Programme</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#infos">Infos pratiques</a></li>
+                        <li class="nav-item ms-2 d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#posterModal"><i class="bi bi-image me-1"></i> Affiche</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <header class="hero py-5">
+            <div class="container">
+                <div class="hero-inner p-4 p-md-5" data-aos="fade-right">
+                    <h1>Polluants Émergents dans l'Eau</h1>
+                    <p class="lead mb-3">Détection • Surveillance • Solutions de Traitement — Journée scientifique dédiée aux défis contemporains de la qualité de l'eau.</p>
+
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <button class="btn btn-lg btn-light rounded-pill me-2" onclick="document.getElementById('programme').scrollIntoView({behavior:'smooth'})">
+                            <i class="bi bi-journal-text me-2"></i> Voir le programme
+                        </button>
+                        <button class="btn btn-lg btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#posterModal">
+                            <i class="bi bi-image me-2"></i> Voir l'affiche
+                        </button>
+                        <button class="btn btn-lg btn-outline-light rounded-pill" data-bs-toggle="modal" data-bs-target="#mapModal">
+                            <i class="bi bi-map me-2"></i> Voir la carte
+                        </button>
+                    </div>
+                </div>
+
+                <!-- decorative wave svg -->
+                <div class="hero-wave" aria-hidden="true">
+                    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="#ffffff"/>
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <!-- Full Width Countdown -->
+        <section class="container-fluid px-0">
+            <div class="countdown-full-width" data-aos="fade-up">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="full-days">00</div>
+                    <div class="countdown-label">jours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="full-hours">00</div>
+                    <div class="countdown-label">heures</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="full-minutes">00</div>
+                    <div class="countdown-label">minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="full-seconds">00</div>
+                    <div class="countdown-label">secondes</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN -->
+        <main class="container my-5">
+
+            <!-- logos -->
+            <section class="mb-4" data-aos="fade-up">
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <img src="certe-logo.png" alt="CERTE Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="logo-placeholder" style="display:none; background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85)); border-radius:12px; padding:15px; width:160px; height:96px; align-items:center; justify-content:center; box-shadow: 0 8px 22px rgba(6,28,45,0.06); font-weight:700; color:var(--primary);">CERTE</div>
+                    
+                    <img src="ministere-logo.png" alt="Ministère Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="logo-placeholder" style="display:none; background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85)); border-radius:12px; padding:15px; width:160px; height:96px; align-items:center; justify-content:center; box-shadow: 0 8px 22px rgba(6,28,45,0.06); font-weight:700; color:var(--primary);">MINISTÈRE</div>
+
+                    <img src="ladven-logo.png" alt="LADVEN Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="logo-placeholder" style="display:none; background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85)); border-radius:12px; padding:15px; width:160px; height:96px; align-items:center; justify-content:center; box-shadow: 0 8px 22px rgba(6,28,45,0.06); font-weight:700; color:var(--primary);">LADVEN</div>
+                    
+                    
+                </div>
+            </section>
+
+            <div class="row g-4">
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="50">
+                    <div class="card-glass">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-circle"><i class="bi bi-calendar-event"></i></div>
+                            <div>
+                                <h5 style="margin:0">Date & Heure</h5>
+                                <div class="muted">1 Décembre 2025 • 9:00 — 13:00</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-flex align-items-start gap-3">
+                            <div style="flex:1">
+                                <h6 class="mb-1">Lieu</h6>
+                                <p class="muted mb-2">Salle de Réunion Ecopark, Tunis</p>
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#mapModal"><i class="bi bi-geo-alt me-1"></i> Voir la carte</button>
+                            </div>
+                            <div style="width:110px; text-align:center;">
+                                <i class="bi bi-geo-fill" style="font-size:2.2rem; color:var(--primary)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="120">
+                    <div class="card-glass">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-circle"><i class="bi bi-person-badge"></i></div>
+                            <div>
+                                <h5 style="margin:0">Cheffe de projet</h5>
+                                <div class="muted">Dr. Nesrine Kamoun</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <p class="mb-1">Expertise en traitement des eaux et gestion des polluants émergents. Interventions scientifiques et atelier pratique.</p>
+                        <a href="#programme" class="btn btn-sm btn-primary">Voir les intervenants</a>
+                    </div>
+                </div>
+
+                <div class="col-12" id="about" data-aos="fade-up">
+                    <div class="card-glass p-4 d-flex gap-3 align-items-start flex-column">
+                        <h4>À propos de l'événement</h4>
+                        <p class="muted mb-0">Journée scientifique dédiée aux polluants émergents dans les ressources en eau. Objectifs : présenter les avancées en détection, partager des solutions de traitement et favoriser les échanges entre chercheurs, professionnels et décideurs.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Programme -->
+            <section class="mt-4" id="programme" data-aos="fade-up">
+                <div class="card-glass p-3">
+                    <h4 class="mb-3">Programme</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-play-circle me-2 text-primary"></i> Session d'ouverture</li>
+                                <li class="mb-2"><i class="bi bi-play-circle me-2 text-primary"></i> Présentations scientifiques</li>
+                                <li class="mb-2"><i class="bi bi-play-circle me-2 text-primary"></i> Table ronde : méthodes analytiques</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-play-circle me-2 text-primary"></i> Démonstration : techniques de détection</li>
+                                <li class="mb-2"><i class="bi bi-play-circle me-2 text-primary"></i> Réseautage & échanges</li>
+                                <li class="mb-2"><i class="bi bi-play-circle me-2 text-primary"></i> Clôture</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project Info -->
+            <section class="mt-4" id="infos" data-aos="fade-up">
+                <div class="card-glass p-3">
+                    <h4>Informations du projet</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Nom :</strong> Projet d'Encouragement Jeune Chercheur</p>
+                            <p class="mb-1"><strong>Référence :</strong> PEJC2023-D1P11</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Organisé par :</strong> Dr. Nesrine Kamoun</p>
+                            <p class="mb-1"><strong>Public :</strong> Chercheurs, étudiants, professionnels</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 style="margin:0">Polluants Émergents dans l'Eau</h5>
+                        <p class="muted mb-0">Détection et Solutions de Traitement — 1 Décembre 2025 • Salle de Réunion Ecopark</p>
+                    </div>
+                    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                        <p class="mb-1">Organisé par <strong>Dr. Nesrine Kamoun</strong></p>
+                        <p class="mb-0"><a href="mailto:nesrine.kamoun@certe.tn">nesrine.kamoun@certe.tn</a> • <a href="#">Site web</a></p>
+                    </div>
+                </div>
+
+                <hr style="border-color: rgba(255,255,255,0.06); margin:1.25rem 0">
+                <div class="text-center small">&copy; 2025 Projet PEJC2023-D1P11 — Tous droits réservés.</div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- POSTER MODAL -->
+    <div class="modal fade" id="posterModal" tabindex="-1" aria-labelledby="posterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="posterModalLabel">Affiche de l'événement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="nesrine-workshop.png" alt="Affiche de l'événement" class="img-fluid">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAP MODAL -->
+    <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapModalLabel">Localisation - Salle de Réunion Ecopark</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3190.845944184456!2d10.180106776397945!3d36.84683137252228!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd85b801c0c6eb%3A0x2c1f6c3d4d5e6f7g!2sEcopark%20Tunis!5e0!3m2!1sfr!2stn!4v1690000000000!5m2!1sfr!2stn" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-1"><strong>Adresse :</strong> Salle de Réunion Ecopark, Tunis, Tunisie</p>
+                        <p class="mb-0"><strong>Accès :</strong> Par la route principale, suivre les indications pour Ecopark</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <a href="https://maps.google.com/?q=Ecopark+Tunis" target="_blank" class="btn btn-primary">
+                        <i class="bi bi-geo-alt me-2"></i>Ouvrir dans Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+    <script>
+        // Init AOS
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({ 
+                once: true, 
+                duration: 700,
+                offset: 100
+            });
+        });
+
+        // Countdown
+        function updateCountdown(){
+            const event = new Date('December 1, 2025 09:00:00');
+            const now = new Date();
+            let diff = event.getTime() - now.getTime();
+
+            if(diff <= 0){
+                document.getElementById('full-days').textContent = '00';
+                document.getElementById('full-hours').textContent = '00';
+                document.getElementById('full-minutes').textContent = '00';
+                document.getElementById('full-seconds').textContent = '00';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000*60*60*24));
+            diff -= days * (1000*60*60*24);
+            const hours = Math.floor(diff / (1000*60*60));
+            diff -= hours * (1000*60*60);
+            const minutes = Math.floor(diff / (1000*60));
+            diff -= minutes * (1000*60);
+            const seconds = Math.floor(diff / 1000);
+
+            document.getElementById('full-days').textContent = String(days).padStart(2,'0');
+            document.getElementById('full-hours').textContent = String(hours).padStart(2,'0');
+            document.getElementById('full-minutes').textContent = String(minutes).padStart(2,'0');
+            document.getElementById('full-seconds').textContent = String(seconds).padStart(2,'0');
+        }
+        
+        // Initialize countdown
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Fix for modal issues - clean initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clean modal initialization without custom handlers
+            var posterModal = document.getElementById('posterModal');
+            var mapModal = document.getElementById('mapModal');
+            
+            if (posterModal) {
+                posterModal.addEventListener('hidden.bs.modal', function () {
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                });
+            }
+            
+            if (mapModal) {
+                mapModal.addEventListener('hidden.bs.modal', function () {
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
